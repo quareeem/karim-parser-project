@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  rabbitmq:
+    image: docker.io/bitnami/rabbitmq
+    container_name: "parser-rabbitmq"
+    ports:
+      # - '4369:4369'
+      # - '5551:5551'
+      # - '5552:5552'
+      - '5672:5672'
+      # - '25672:25672'
+      - '15672:15672'
+    environment:
+      - RABBITMQ_USERNAME=kara
+      - RABBITMQ_PASSWORD=qwerty
+      - RABBITMQ_SECURE_PASSWORD=yes
+      - RABBITMQ_LOGS=-
+    volumes:
+      - 'rabbitmq_data:/bitnami/rabbitmq/mnesia'
+
+
+  parser-service:
+    build: ./kazdream-parsing/
+    container_name: "parser-service"
+    depends_on:
+      - "rabbitmq"
+    volumes:
+      - "./kazdream-parsing:/app"
+    ports:
+      - "8000:8000"
+    command: "python3 parser/main.py"
+    # command: sleep infinity
+  
+
+  db-service:
+    build: ./kazdream-database/
+    container_name: "db-service"
+    depends_on:
+      - "parser-service"
+    volumes:
+      - "./kazdream-database:/app"
+    ports:
+      - "8001:8001"
+    command: "python3 receiver.py"
+    # command: sleep infinity
+
+volumes:
+  rabbitmq_data:
+    driver: local
