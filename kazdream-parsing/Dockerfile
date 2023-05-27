@@ -10,3 +10,4 @@ RUN apt-get update -yqq && apt-get upgrade -yqq && apt-get install -y --no-insta
 COPY . /app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
+

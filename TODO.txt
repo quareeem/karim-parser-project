@@ -1,0 +1,7 @@
+1. SET UP POSTGRES CONTAINER
+    - write correct docker-compose script
+    - prepopulate tables (if needed)
+
+2. CONNECT POSTGRES TO RECEIVER SCRIPT
+
+3. WRITE LOGIC TO SAVE PRODUCT ITEMS TO DATABASE
